@@ -16,3 +16,18 @@ GET     /pageNotFound               controllers.Application.pageNotFound()
 GET     /badRequest                 controllers.Application.badRequest()
 GET     /oops                       controllers.Application.oops()
 GET     /anyStatus                  controllers.Application.anyStatus()
+
+GET     /default                    controllers.Application.default(id :Long ?= 0)
+GET     /static/all                 controllers.Application.getList()
+GET     /dynamic/$id<[0-9]+>        controllers.Application.dynamic(id :Int)
+GET     /set                        controllers.Application.set(input:String = "hello")
+GET     /optional                   controllers.Application.optional(id: Option[String])
+
+GET     /reverseRouting             controllers.Application.reverseRoutingToHome()
+GET     /reverseRouting             controllers.Application.reverseRoutingTopageNotFound()
+
+GET     /pageWithCookies            controllers.Application.pageWithCookies()
+GET     /pageWithCookies/edit       controllers.Application.editCookies()
+GET     /pageWithCookies/discard    controllers.Application.discardCookies()
+GET     /pageWithCookies/display    controllers.Application.displayCookie()
+
