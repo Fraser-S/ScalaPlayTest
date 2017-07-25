@@ -1,15 +1,13 @@
 
 package controllers
 
-import play.api._
 import play.api.mvc._
-import play.mvc.Http
 
 class Application extends Controller {
 
-  val numbers = (1 to 100)
+  private val numbers: List[Int] = (1 to 100).toList
 
-  def index() = Action{
+  def index(): Action[AnyContent] = Action{
     Redirect("/home" )
   }
 
@@ -17,76 +15,117 @@ class Application extends Controller {
     Ok(<H1>Home Page</H1>).as(HTML)
   }
 
-  def toImplement() = TODO
+  def stillToImplement(): Action[AnyContent] = TODO
 
-  def notFound() = Action {
+  def notFound(): Action[AnyContent] = Action {
     NotFound //i assume this is correct it's hard to tell
   }
 
-  def pageNotFound() = Action {
+  def pageNotFound(): Action[AnyContent] = Action {
     NotFound(<H1>Page Not Found</H1>).as(HTML)
   }
 
-  def badRequest() = Action {
+  def badRequest(): Action[AnyContent] = Action {
     BadRequest("Something Bad Happened")
   }
 
-  def oops = Action {
+  def oops(): Action[AnyContent] = Action {
     InternalServerError("Oops")
   }
 
-  def anyStatus() = Action{
-    Status(488)("Strange Response Type")
+  def anyStatus(): Action[AnyContent] = Action{
+    val strangeResponse :Int = 488
+    Status(strangeResponse)("Strange Response Type")
   }
 
-  def default(id :Long) = Action{
+  def default(id :Long): Action[AnyContent] = Action{
     Ok(id.toString)
   }
 
-  def dynamic(id :Long) = Action{
+  def dynamic(id :Long): Action[AnyContent] = Action{
     Ok(id.toString)
   }
 
-  def set(input:String) = Action{
+  def set(input:String): Action[AnyContent] = Action{
     Ok(input)
   }
 
-  def list(id: Int) = Action {
+  def list(id: Int): Action[AnyContent] = Action {
     Ok(numbers(id).toString)
   }
 
-  def getList() = Action {
+  def displayList(): Action[AnyContent] = Action {
     Ok(numbers.toString)
   }
 
-  def optional(id: Option[String]) = Action{
+  def optional(id: Option[String]): Action[AnyContent] = Action{
     Ok(id.toString)
   }
 
-  def reverseRoutingToHome() = Action {
+  def reverseRoutingToHome(): Action[AnyContent] = Action {
     Redirect(routes.Application.home())
   }
 
-  def reverseRoutingTopageNotFound() = Action{
+  def reverseRoutingToPageNotFound(): Action[AnyContent] = Action{
     Redirect(routes.Application.pageNotFound())
   }
 
-  def pageWithCookies() = Action{
+  def pageWithCookies(): Action[AnyContent] = Action{
     Ok("This page uses cookies").withCookies(
       Cookie("theme","blue"))
   }
 
-  def editCookies() = Action{
-    Ok("Set to red").discardingCookies(DiscardingCookie("theme"))withCookies(
-      Cookie("theme","red"))
+  def editCookies(): Action[AnyContent] = Action{
+    Ok("Set to red").discardingCookies(
+      DiscardingCookie("theme"))withCookies Cookie("theme","red")
   }
 
-  def discardCookies() = Action{
-    Ok("This page removed the cookie").discardingCookies(DiscardingCookie("theme"))
+  def discardCookies(): Action[AnyContent] = Action{
+    Ok("This page removed the cookie").discardingCookies(
+      DiscardingCookie("theme"))
   }
 
-  def displayCookie() = Action { request =>
-    request.cookies.get("theme").map{value => Ok(value.value)}.getOrElse(Ok("Cookie Jar Empty"))
+  def displayCookie(): Action[AnyContent] = Action { request =>
+    request.cookies.get("theme").map{
+      value => Ok(value.value)
+    }.getOrElse(Ok("Cookie Jar Empty"))
+  }
+
+  def createSession(): Action[AnyContent] = Action{
+    Ok("Start A Session").withSession(
+      "connected"->"user@provider.com")
+  }
+
+  def addDataToSession(): Action[AnyContent] = Action{ request =>
+    Ok("Add Data to the session").withSession(
+        request.session + ("theme" -> "blue"))
+  }
+
+  def removeDataFromSession(): Action[AnyContent] = Action{ request =>
+    Ok("Add Data to the session").withSession(
+      request.session - "theme")
+  }
+
+  def readSession(): Action[AnyContent] = Action{ request =>
+    request.session.get("theme").map{
+      value => Ok("hello " + value)
+    }.getOrElse(Ok("not connected"))
+  }
+
+  def readSessionData(): Action[AnyContent] = Action{ request =>
+    Ok(request.session.data.toString())
+  }
+
+  def setFlash(): Action[AnyContent] = Action{
+    Redirect("/flashing/getData").flashing(
+      "Data" -> "This was passed via flashing"
+    )
+  }
+
+  def fetchFlashData(): Action[AnyContent] = Action {
+    implicit request: Request[AnyContent] =>
+      request.flash.get("Data").map{
+        value => Ok(value)
+      }.getOrElse(Ok("no data"))
   }
 }
-

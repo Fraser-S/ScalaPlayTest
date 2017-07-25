@@ -10,7 +10,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 GET     /home                       controllers.Application.home()
 
-GET     /toImplement                controllers.Application.toImplement()
+GET     /toImplement                controllers.Application.stillToImplement()
 GET     /notFound                   controllers.Application.notFound()
 GET     /pageNotFound               controllers.Application.pageNotFound()
 GET     /badRequest                 controllers.Application.badRequest()
@@ -18,16 +18,24 @@ GET     /oops                       controllers.Application.oops()
 GET     /anyStatus                  controllers.Application.anyStatus()
 
 GET     /default                    controllers.Application.default(id :Long ?= 0)
-GET     /static/all                 controllers.Application.getList()
+GET     /static/all                 controllers.Application.displayList()
 GET     /dynamic/$id<[0-9]+>        controllers.Application.dynamic(id :Int)
-GET     /set                        controllers.Application.set(input:String = "hello")
+GET     /set                        controllers.Application.set(input:String ="hello")
 GET     /optional                   controllers.Application.optional(id: Option[String])
 
 GET     /reverseRouting             controllers.Application.reverseRoutingToHome()
-GET     /reverseRouting             controllers.Application.reverseRoutingTopageNotFound()
+GET     /reverseRouting             controllers.Application.reverseRoutingToPageNotFound()
 
 GET     /pageWithCookies            controllers.Application.pageWithCookies()
 GET     /pageWithCookies/edit       controllers.Application.editCookies()
 GET     /pageWithCookies/discard    controllers.Application.discardCookies()
 GET     /pageWithCookies/display    controllers.Application.displayCookie()
 
+GET     /sessions                   controllers.Application.createSession()
+GET     /sessions/addData           controllers.Application.addDataToSession()
+GET     /sessions/removeData        controllers.Application.removeDataFromSession()
+GET     /sessions/readSessions      controllers.Application.readSession()
+GET     /sessions/readSessionData   controllers.Application.readSessionData()
+
+GET     /flashing                   controllers.Application.setFlash()
+GET     /flashing/getData           controllers.Application.fetchFlashData()
